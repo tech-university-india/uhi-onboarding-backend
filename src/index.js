@@ -1,19 +1,17 @@
-const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
-
-app.use(bodyParser.json());
+const onboardingRoutes = require('./routes/onboarding/onboardingRoutes');
+app.use(express.text());
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-/**
- * @param {Request} req;
- * @param {Response} res;
- */
 
-app.get('/', (req, res) => {
-
-	res.send('Hello World');
-
+app.use('/', (request, response) => {
+	response.send('Welcome to the backend API');
 });
+
+app.use('/onboarding', onboardingRoutes);
+
+
 
 
 app.listen(5000);

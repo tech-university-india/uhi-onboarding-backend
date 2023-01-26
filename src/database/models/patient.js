@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require("sequelize");
-class Patient extends Model {}
+class Patient extends Model { }
 Patient.init({
     id: {
         autoIncrement: true,

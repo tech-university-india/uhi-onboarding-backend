@@ -1,9 +1,9 @@
 require('dotenv').config()
-
 const express = require('express')
 const sequelize = require('./database/dbConnection')
 const app = express()
 const onboardingRoutes = require('./routes/onboarding/doctor')
+
 
 sequelize.authenticate()
   .then(() => console.log('Connection to Database was successful'))

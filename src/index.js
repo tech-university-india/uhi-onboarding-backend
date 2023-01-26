@@ -1,19 +1,25 @@
-const bodyParser = require('body-parser');
+require('dotenv').config();
+
 const express = require('express');
+const sequelize = require('./database/dbConnection');
 const app = express();
+const onboardingRoutes = require('./routes/onboarding/doctor');
 
-app.use(bodyParser.json());
+sequelize.authenticate().then(() => console.log('Connection to Database was successful')).catch(console.log);
+
+
+app.use(express.text());
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-/**
- * @param {Request} req;
- * @param {Response} res;
- */
 
-app.get('/', (req, res) => {
-
-	res.send('Hello World');
-
+app.use('/', (request, response) => {
+	response.send('Welcome to the backend API');
 });
+
+app.use('/onboarding', onboardingRoutes);
+
+
+
 
 
 app.listen(5000);

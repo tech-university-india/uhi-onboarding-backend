@@ -6,7 +6,6 @@
   "scripts": {
     "test": "nodemon src/index.js"
   },
-  "author": "McKinsey and Company",
   "license": "ISC",
   "devDependencies": {
     "eslint": "^8.32.0",

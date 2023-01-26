@@ -1,4 +1,4 @@
-const { handleNewDoctorOnboardingRequest } = require('../../functions/onboarding/createDoctor');
+const { handleNewDoctorOnboardingRequest } = require('../../functions/onboarding/doctor/createDoctor');
 
 const router = require('express').Router();
 

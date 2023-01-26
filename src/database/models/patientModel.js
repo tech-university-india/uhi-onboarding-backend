@@ -20,4 +20,6 @@ Patient.init({
 	},
 });
 
+Patient.sync({force: true}).then(console.log('Successfully Synchornized the Database with Patient table')).catch(console.log);
+
 module.exports = Patient;

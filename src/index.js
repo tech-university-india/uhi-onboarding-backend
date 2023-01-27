@@ -1,9 +1,12 @@
 require('dotenv').config()
 
 const express = require('express')
-const sequelize = require('./database/dbConnection')
+const sequelize = require('./services/database/dbConnection')
 const app = express()
-const onboardingRoutes = require('./routes/onboarding/doctor')
+const onboardingRoutes = require('./routes/onboarding')
+const abdm = require('./util/abdm')
+
+abdm.getJWTToken()
 
 sequelize.authenticate()
   .then(() => console.log('Connection to Database was successful'))

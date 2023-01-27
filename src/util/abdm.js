@@ -4,8 +4,7 @@
 
 const jose = require('jose')
 const fs = require('fs')
-const FILE_NAME = './src/token/fetchedToken.txt'
-
+const FILE_NAME = './src/util/fetchedToken.txt'
 const tokenFileExists = () =>
   fs.existsSync(FILE_NAME)
 

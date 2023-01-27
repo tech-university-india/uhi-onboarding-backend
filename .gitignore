@@ -1,5 +1,5 @@
 node_modules
 node_modules/
 .env
-src/token/fetchedToken.txt
-./src/token/fetchedToken.txta
+./src/util/fetchedToken.txt
+src/util/fetchedToken.txt

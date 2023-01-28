@@ -23,12 +23,6 @@ const writeTokenFileWithNewToken = (token) => new Promise((resolve, reject) => {
   })
 })
 
-/**
- * "If the token file exists, read it and return the contents, otherwise return an empty string."
- * It's a Promise that resolves to the contents of the file, or an empty string if the file doesn't exist
- * @returns A promise that resolves to the contents of the file or an empty string if the file does not
- * exist.
- */
 const readTokenFile = () => {
   if (tokenFileExists()) {
     return new Promise((resolve, reject) => {
@@ -37,17 +31,11 @@ const readTokenFile = () => {
       })
     })
   }
-  return '' // File do not exits
+  return '' // File do not exist
 }
 
-/**
- * If there's no token or the token has expired, fetch a new one from the server and write it to the
- * file. Otherwise, return the token
- * @returns An object with two properties: token and decoded.
- */
 const getJWTToken = async () => {
   const token = await readTokenFile()
-  console.log(Date.now())
   if (token.length === 0 || (token.length > 0 && parseJWT(token).exp * 1000 < Date.now())) {
     const newToken = await fetchJWTFromServer()
     await writeTokenFileWithNewToken(newToken)

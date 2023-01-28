@@ -4,9 +4,10 @@ const express = require('express')
 const sequelize = require('./services/database/dbConnection')
 const app = express()
 const onboardingRoutes = require('./routes/onboarding')
-
 sequelize.authenticate()
-  .then(() => console.log('Connection to Database was successful'))
+  .then(() => console.log('Connection to Database was successful')).then(async () => {
+    console.log('Database synced successfully')
+  })
   .catch(console.log)
 
 app.use(express.text())

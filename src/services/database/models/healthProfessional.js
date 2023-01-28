@@ -9,7 +9,7 @@ HealthProfessional.init({
     autoIncrement: true,
     primaryKey: true
   },
-  hpr_id: {
+  hprId: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true
@@ -18,32 +18,32 @@ HealthProfessional.init({
     type: DataTypes.STRING,
     allowNull: false
   },
-  first_name: {
+  firstName: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  middle_name: { type: DataTypes.STRING },
-  last_name: { type: DataTypes.STRING },
+  middleName: { type: DataTypes.STRING },
+  lastName: { type: DataTypes.STRING },
   email: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  profile_image: { type: DataTypes.STRING },
+  profileImage: { type: DataTypes.STRING },
   gender: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  hpr_type: {
+  hprType: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  language_spoken: {
+  languageSpoken: {
     type: DataTypes.STRING,
     allowNull: false
   }
 
 }, { sequelize }
 )
-HealthProfessional.hasMany(HealthProfessionalPhone, { foreignKey: 'health_professional_id', sourceKey: 'id' })
+HealthProfessional.hasMany(HealthProfessionalPhone, { foreignKey: 'healthProfessionalId', sourceKey: 'id' })
 
 module.exports = HealthProfessional

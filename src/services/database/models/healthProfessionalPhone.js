@@ -4,9 +4,9 @@ class HealthProfessionalPhone extends Model {}
 
 HealthProfessionalPhone.init({
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  health_professional_id: { type: DataTypes.INTEGER, allowNull: false },
-  phone_type: { type: DataTypes.STRING, allowNull: false },
-  phone_num: { type: DataTypes.STRING, allowNull: false }
+  healthProfessionalId: { type: DataTypes.INTEGER, allowNull: false },
+  phoneType: { type: DataTypes.STRING, allowNull: false },
+  phoneNum: { type: DataTypes.STRING, allowNull: false }
 
 }, { sequelize })
 

@@ -1,5 +1,4 @@
 require('dotenv').config()
-
 const express = require('express')
 const sequelize = require('./services/database/dbConnection')
 const app = express()
@@ -13,10 +12,10 @@ app.use(express.text())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+app.use('/onboarding', onboardingRoutes)
+
 app.use('/', (request, response) => {
   response.send('Welcome to the backend API')
 })
-
-app.use('/onboarding', onboardingRoutes)
 
 app.listen(9007)

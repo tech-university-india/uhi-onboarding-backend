@@ -36,13 +36,13 @@ const readTokenFile = () => {
 }
 
 const getJWTToken = async () => {
- // const token = await readTokenFile()
-  //if (token.length === 0 || (token.length > 0 && parseJWT(token).exp * 1000 < Date.now())) {
+ const token = await readTokenFile()
+  if (token.length === 0 || (token.length > 0 && parseJWT(token).exp * 1000 < Date.now())) {
     const newToken = await fetchJWTFromServer()
-   // await writeTokenFileWithNewToken(newToken)
+   await writeTokenFileWithNewToken(newToken)
     return { token: newToken, decoded: parseJWT(newToken) }
- // }
- // return { token, decoded: parseJWT(token) }
+ }
+ return { token, decoded: parseJWT(token) }
 }
 
 module.exports = { getJWTToken }

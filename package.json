@@ -2,9 +2,9 @@
   "name": "uhi-onboarding-backend",
   "version": "1.0.0",
   "description": "Open Source Client Backend for ABDM UHI",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
-    "test": "nodemon src/index.js"
+    "test": "nodemon index.js"
   },
   "license": "ISC",
   "devDependencies": {

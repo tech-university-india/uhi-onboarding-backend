@@ -3,8 +3,9 @@ const crypto = require('crypto')
 const abdm = require('../../util/abdm')
 
 
-let transactioId = '';
+let transactionId = '';
 let tokenGlobal = '';
+let isLinked = '';
 
 const handleNewUserOnboardingRequest = async (request, response) => {
   //console.log(token);
@@ -25,7 +26,8 @@ const handleNewUserOnboardingRequest = async (request, response) => {
         Authorization: `Bearer ${token}`,
   }
   });
-
+  //console.log(typeof responseTxId.data);
+  transactionId = responseTxId.data.txnId;
   // transactioID
   // send transaction id with redirect
 
@@ -39,27 +41,28 @@ const handleNewUserOnboardingRequest = async (request, response) => {
 const handleUserVerificationRequest = async (request, response) => {
   // request should contain opt and transaction id
   const userOtp = request.body.otp;
+  console.log(userOtp);
   // const userMobile = request.body.mobile;
-  console.log('this is verify user');
   const responseTxnId = await axios.post('https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/verifyOTP', {
       "otp": userOtp,
-      "txnId": transactioId
+      "txnId": transactionId
     },{
       headers: {
           Authorization: `Bearer ${tokenGlobal}`,
       }
     });
 
-    console.log(responseTxnId.data);
-
-    response.redirect('');
+    transactionId = responseTxnId.data.txnId;
+    console.log(transactionId);
+    
 }
+
 
 const handleCheckAndGenerateMobileOTP = async (request, response) => {
   const userMobileNum = request.body.mobile;
   const responseTxnId = await axios.post('https://healthidsbx.abdm.gov.in/api/v2/registration/aadhaar/checkAndGenerateMobileOTP', {
     "mobile": userMobileNum,
-    "txnId": transactioId
+    "txnId": transactionId
 },{
   headers:{
     Authorization: `Bearer ${tokenGlobal}`,
@@ -67,6 +70,8 @@ const handleCheckAndGenerateMobileOTP = async (request, response) => {
 });
 
 console.log(responseTxnId.data);
+transactionId = responseTxnId.data.txnId
+isLinked = responseTxnId.data.mobileLinked;
 }
 
 const verifyMobileOTP = async (request, response) => {
@@ -75,7 +80,7 @@ const verifyMobileOTP = async (request, response) => {
   console.log('this is verify Mobile OTP');
   const responseTxnId = await axios.post('https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/verifyOTP', {
       "otp": userOtp,
-      "txnId": transactioId
+      "txnId": transactionId
     },{
       headers: {
           Authorization: `Bearer ${tokenGlobal}`,
@@ -83,7 +88,11 @@ const verifyMobileOTP = async (request, response) => {
     });
 
     console.log(responseTxnId.data);
+    transactionId = responseTxnId.data.txnId
 }
+
+
+
 
 const createHeathIDPreVerifiedNumber = async (request, response) => {
 
@@ -91,7 +100,7 @@ const createHeathIDPreVerifiedNumber = async (request, response) => {
     // "mobile": userMobileNum,
     // "txnId": transactioId
     ...request.body,
-    txnId: transactioId,
+    txnId: transactionId,
 },{
   headers:{
     Authorization: `Bearer ${tokenGlobal}`,

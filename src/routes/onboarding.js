@@ -11,7 +11,7 @@ router.route('/users')
 
 router.post('/users/verifyOTP', user.handleUserVerificationRequest)
 
-//router.post('/')
+router.post('/users/checkAndGenerateMobileOTP', user.handleCheckAndGenerateMobileOTP);
 
 
 module.exports = router

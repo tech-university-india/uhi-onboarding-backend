@@ -1,17 +1,25 @@
-const { handleNewDoctorOnboardingRequest } = require('../controllers/onboarding/createDoctor')
-const user = require('../controllers/onboarding/createUser')
+const user = require("../controllers/onboarding/createUser");
+const router = require("express").Router();
 
-const router = require('express').Router()
+const {
+  handleNewDoctorOnboardingRequest,
+} = require("../controllers/onboarding/createDoctor");
 
-router.route('/doctors')
-  .post(handleNewDoctorOnboardingRequest)
+router.route("/doctors").post(handleNewDoctorOnboardingRequest);
 
-router.route('/users')
-  .post(user.handleNewUserOnboardingRequest)
+router.route("/users").post(user.handleNewUserOnboardingRequest);
 
-router.post('/users/verifyOTP', user.handleUserVerificationRequest)
+router.post("/users/verifyOTP", user.handleUserVerificationRequest);
 
-router.post('/users/checkAndGenerateMobileOTP', user.handleCheckAndGenerateMobileOTP);
+router.post(
+  "/users/checkAndGenerateMobileOTP",
+  user.handleCheckAndGenerateMobileOTP
+);
 
+router.post('/users/verifyMobileOTP', user.verifyMobileOTP);
 
-module.exports = router
+router.post('/users/createHeathIDPreVerifiedNumber', user.createHeathIDPreVerifiedNumber);
+
+//router.post('users/', user.resendOTP)
+
+module.exports = router;

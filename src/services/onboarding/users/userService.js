@@ -12,7 +12,7 @@ let userData = {};
 const handleNewUserOnboardingRequest = async (aadhar) => {
   const { token, decoded } = await abdm.getJWTToken();
   tokenGlobal = token;
-  publicKeyGlobal = await pkKey.getPublicKey();
+  publicKeyGlobal = await pkKey.getPublicKey(tokenGlobal);
   const encryptedAadhar = await encrypt.getEncrypted(
     aadhar.toString(),
     publicKeyGlobal

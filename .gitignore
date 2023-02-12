@@ -2,4 +2,4 @@
 ./fetchedToken.txt
 fetchedToken.txt
 node_modules
-.vscode/
+.vscode

@@ -1,3 +1,6 @@
+const getPublicKeyUrl = 'https://healthidsbx.abdm.gov.in/api/v2/auth/cert'
+
+
 
 const generateOtpUrl = 'https://healthidsbx.abdm.gov.in/api/v2/registration/aadhaar/generateOtp'
 const verifyOtpUrl = 'https://healthidsbx.abdm.gov.in/api/v2/registration/aadhaar/verifyOTP'
@@ -12,5 +15,6 @@ module.exports = {
     resendOtpUrl,
     checkAndGenerateMobileOtpUrl,
     verifyMobilOtpUrl,
-    createHealthIdUrl
+    createHealthIdUrl,
+    getPublicKeyUrl
 }

@@ -1,8 +1,14 @@
 const axios = require('axios');
+const urlEndpoint = require('../config/User/onboardingEndpoints')
 
-const getPublicKey = async() => {
-    const CERT_URL = 'https://healthidsbx.abdm.gov.in/api/v1/auth/cert'
-    const publicKey = await axios.get(CERT_URL);
+const getPublicKey = async(token) => {
+    const CERT_URL = urlEndpoint.getPublicKeyUrl;
+    const publicKey = await axios.get(CERT_URL,{
+        headers: {
+            Authorization: `Bearer ${token}`,
+        }
+    });
+    console.log(publicKey.data);
     return publicKey.data;
 }
 

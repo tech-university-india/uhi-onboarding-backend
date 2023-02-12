@@ -3,3 +3,5 @@
 fetchedToken.txt
 node_modules
 .vscode
+node_modules/
+database/config/config.json

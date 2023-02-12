@@ -1,9 +1,9 @@
 const axios = require('axios');
-
+const urlEndpoint = require('../config/User/onboardingEndpoints')
 
 
 const generateOtp = async (encAadhar, token) => {
-    const response = axios.post('https://healthidsbx.abdm.gov.in/api/v2/registration/aadhaar/generateOtp', {
+    const response = axios.post(urlEndpoint.generateOtpUrl, {
     aadhaar: encAadhar,
   },{
     headers: {
@@ -14,9 +14,8 @@ const generateOtp = async (encAadhar, token) => {
 }
 
 const verifyOtp = async (encOtp, txnId, token) => {
-    const response = await axios.post('https://healthidsbx.abdm.gov.in/api/v2/registration/aadhaar/verifyOTP', {
-        // if v2 use encryptedOTP
-          "otp": encOtp,//userOtp,
+    const response = await axios.post(urlEndpoint.verifyOtpUrl, {
+          "otp": encOtp,
           "txnId": txnId
         },{
           headers: {
@@ -26,8 +25,19 @@ const verifyOtp = async (encOtp, txnId, token) => {
     return response;
 }
 
+const resendOtp = async (txnId, token) => {
+  const response = await axios.post(urlEndpoint.resendOtpUrl, {
+    "txnId": txnId
+  }, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
+  return response;
+}
+
 const checkAndGenerateMobileOTP = async (mobileNum, txnId, token) => {
-    const response = await axios.post('https://healthidsbx.abdm.gov.in/api/v2/registration/aadhaar/checkAndGenerateMobileOTP', {
+    const response = await axios.post(urlEndpoint.checkAndGenerateMobileOtpUrl, {
     "mobile": mobileNum,
     "txnId": txnId
 },{
@@ -38,10 +48,8 @@ const checkAndGenerateMobileOTP = async (mobileNum, txnId, token) => {
 return response;
 }
 
-
-
 const verifyMobileOtp = async (otp, txnId, token) => {
-    const response = await axios.post('https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/verifyMobileOTP', {
+    const response = await axios.post(urlEndpoint.verifyMobilOtpUrl, {
       "otp": otp,
       "txnId": txnId
     },{
@@ -53,9 +61,7 @@ const verifyMobileOtp = async (otp, txnId, token) => {
 }
 
 const createHealthIdWithPreVerified = async (userData, userDetails, txnId, token) => {
-    const response = await axios.post('https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/createHealthIdWithPreVerified', {
-    // "mobile": userMobileNum,
-    // "txnId": transactioId
+    const response = await axios.post(urlEndpoint.createHealthIdUrl, {
     ...userData,
     ...userDetails,
     txnId: txnId,
@@ -67,10 +73,10 @@ const createHealthIdWithPreVerified = async (userData, userDetails, txnId, token
 return response
 }
 
-
 module.exports = { generateOtp, 
     verifyOtp,
     checkAndGenerateMobileOTP,
     verifyMobileOtp,
-    createHealthIdWithPreVerified
+    createHealthIdWithPreVerified,
+    resendOtp
 }

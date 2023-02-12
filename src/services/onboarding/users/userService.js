@@ -1,5 +1,3 @@
-const axios = require("axios");
-const crypto = require("crypto");
 const abdm = require("../../../util/abdm");
 const pkKey = require("../../../util/publicKeyFetcher");
 const encrypt = require("../../../util/encryptionUtil");
@@ -22,10 +20,6 @@ const handleNewUserOnboardingRequest = async (aadhar) => {
   const responseTxId = await userApis.generateOtp(encryptedAadhar, token);
   console.log(responseTxId.data);
   transactionId = responseTxId.data.txnId;
-
-  // transactioID
-  // send transaction id with redirect
-  //response.redirect('/users/verify');
 };
 
 const handleUserVerificationRequest = async (otp) => {
@@ -42,8 +36,13 @@ const handleUserVerificationRequest = async (otp) => {
   console.log(transactionId);
 };
 
+const handleResendOtp = async () => {
+  const txnResponse = await userApis.resendOtp(transactionId, tokenGlobal);
+  console.log(txnResponse.data);
+  transactionId = txnResponse.data.txnId;
+}
+
 const handleCheckAndGenerateMobileOTP = async (mobileNum) => {
-  //const encryptedMobile = encrypt.getEncrypted(mobileNum.toString(), publicKeyGlobal);
   const txnResponse = await userApis.checkAndGenerateMobileOTP(
     mobileNum,
     transactionId,
@@ -83,4 +82,5 @@ module.exports = {
   handleCheckAndGenerateMobileOTP,
   verifyMobileOtp,
   createHeathIDPreVerifiedNumber,
+  handleResendOtp
 };

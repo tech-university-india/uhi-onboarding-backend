@@ -7,18 +7,17 @@ const handleNewUserOnboardingRequest = async (request, response) => {
 
 const handleUserVerificationRequest = async (request, response) => {
   let userOtp = request.body.otp;
-  // for v2
   await userService.handleUserVerificationRequest(userOtp);
 };
+
+const resendOTP = async (request, response) => {
+  await userService.handleResendOtp();
+}
 
 const handleCheckAndGenerateMobileOTP = async (request, response) => {
   const userMobileNum = request.body.mobile;
   await userService.handleCheckAndGenerateMobileOTP(userMobileNum);
 };
-
-const resendOTP = async (request, response) => {
-
-}
 
 const verifyMobileOTP = async (request, response) => {
   const userOtp = request.body.otp;

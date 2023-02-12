@@ -13,11 +13,13 @@ const handleNewUserOnboardingRequest = async (aadhar) => {
   const { token, decoded } = await abdm.getJWTToken();
   tokenGlobal = token;
   publicKeyGlobal = await pkKey.getPublicKey(tokenGlobal);
+  console.log(aadhar)
   const encryptedAadhar = await encrypt.getEncrypted(
     aadhar.toString(),
     publicKeyGlobal
   );
   const responseTxId = await userApis.generateOtp(encryptedAadhar, token);
+  console.log(encryptedAadhar)
   console.log(responseTxId.data);
   transactionId = responseTxId.data.txnId;
 };

@@ -2,31 +2,32 @@ const userService = require("../../services/onboarding/users/userService");
 
 const handleNewUserOnboardingRequest = async (request, response) => {
   let { aadhaar } = request.body;
-  await userService.handleNewUserOnboardingRequest(aadhaar);
+  const {status,message}=await userService.handleNewUserOnboardingRequest(aadhaar);
+  response.status(status).json(message);
 };
 
 const handleUserVerificationRequest = async (request, response) => {
   let userOtp = request.body.otp;
-  await userService.handleUserVerificationRequest(userOtp);
+  const {status,message}=await userService.handleUserVerificationRequest(userOtp);
 };
 
 const resendOTP = async (request, response) => {
-  await userService.handleResendOtp();
+  const {status,message}=await userService.handleResendOtp();
 }
 
 const handleCheckAndGenerateMobileOTP = async (request, response) => {
   const userMobileNum = request.body.mobile;
-  await userService.handleCheckAndGenerateMobileOTP(userMobileNum);
+  const {status,message}=await userService.handleCheckAndGenerateMobileOTP(userMobileNum);
 };
 
 const verifyMobileOTP = async (request, response) => {
   const userOtp = request.body.otp;
-  await userService.verifyMobileOtp(userOtp);
+  const {status,message}=await userService.verifyMobileOtp(userOtp);
 };
 
 const createHeathIDPreVerifiedNumber = async (request, response) => {
   const userDetails = request.body;
-  await userService.createHeathIDPreVerifiedNumber(userDetails);
+  const {status,message}=await userService.createHeathIDPreVerifiedNumber(userDetails);
 };
 
 module.exports = {};

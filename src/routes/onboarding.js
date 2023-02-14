@@ -2,10 +2,6 @@ const user = require("../controllers/onboarding/createUser");
 const router = require("express").Router();
 const Validation=require("../middlewares/UserOnboarding/validation");
 
-const {handleNewDoctorOnboardingRequest,} = require("../controllers/onboarding/createDoctor");
-
-router.route("/doctors").post(handleNewDoctorOnboardingRequest);
-
 router.post("/users",Validation.Validator,user.handleNewUserOnboardingRequest);
 
 router.post("/users/resendAadhaarOtp",Validation.Validator, user.resendOTP);

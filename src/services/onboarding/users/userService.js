@@ -1,8 +1,9 @@
 const abdm = require("../../../util/abdm");
 const pkKey = require("../../../util/publicKeyFetcher");
 const encrypt = require("../../../util/encryptionUtil");
-const userApis = require("../../../util/userOnboardingApi");
 const HTTPError = require("../../../../src/util/error");
+const axios = require('axios');
+const urlEndpoint = require('../../../config/User/onboardingEndpoints')
 
 let tokenGlobal = "";
 let publicKeyGlobal = "";
@@ -22,7 +23,13 @@ const handleNewUserOnboardingRequest = async (aadhar) => {
   );
   if(encryptedAadhar===undefined)
     return new HTTPError("Something went wrong",500);
-  const responseTxId = await userApis.generateOtp(encryptedAadhar, token);
+  const responseTxId=await axios.post(urlEndpoint.generateOtpUrl, {
+    aadhaar: encryptedAadhar,
+  },{
+    headers: {
+        Authorization: `Bearer ${tokenGlobal}`,
+  }
+  });
   transactionId = responseTxId.data.txnId;
   return responseTxId.data;
 };
@@ -31,28 +38,40 @@ const handleUserVerificationRequest = async (otp) => {
   const encryptedOTP = await encrypt.getEncrypted(otp.toString(), publicKeyGlobal);
   if(encryptedOTP===undefined)
     return new HTTPError("Something went wrong",500);
-  const txnResponse = await userApis.verifyOtp(
-    encryptedOTP,
-    transactionId,
-    tokenGlobal
-  );
+  const txnResponse=await axios.post(urlEndpoint.verifyOtpUrl, {
+    "otp": encryptedOTP,
+    "txnId": transactionId
+  },{
+    headers: {
+        Authorization: `Bearer ${tokenGlobal}`,
+    }
+  });
   transactionId = txnResponse.data.txnId;
   userData = txnResponse.data;
   return txnResponse.data;
 };
 
 const handleResendOtp = async () => {
-  const txnResponse = await userApis.resendOtp(transactionId, tokenGlobal);
+  const txnResponse = await axios.post(urlEndpoint.resendOtpUrl, {
+    "txnId": transactionId
+  }, {
+    headers: {
+      Authorization: `Bearer ${tokenGlobal}`,
+    }
+  });
   transactionId = txnResponse.data.txnId;
   return txnResponse.data;
 }
 
 const handleCheckAndGenerateMobileOTP = async (mobileNum) => {
-  const txnResponse = await userApis.checkAndGenerateMobileOTP(
-    mobileNum,
-    transactionId,
-    tokenGlobal
-  );
+  const txnResponse = await axios.post(urlEndpoint.checkAndGenerateMobileOtpUrl, {
+    "mobile": mobileNum,
+    "txnId": transactionId
+},{
+  headers:{
+    Authorization: `Bearer ${tokenGlobal}`,
+  }
+});
   transactionId = txnResponse.data.txnId;
   isLinked = txnResponse.data.mobileLinked;
   return isLinked;
@@ -62,22 +81,28 @@ const handleCheckAndGenerateMobileOTP = async (mobileNum) => {
 
 const verifyMobileOtp = async (otp) => {
   const userOtp = otp;
-  const txnResponse = await userApis.verifyMobileOtp(
-    userOtp,
-    transactionId,
-    tokenGlobal
-  );
+  const txnResponse = await axios.post(urlEndpoint.verifyMobilOtpUrl, {
+    "otp": userOtp,
+    "txnId": transactionId
+  },{
+    headers: {
+        Authorization: `Bearer ${tokenGlobal}`,
+    }
+  });
   transactionId = txnResponse.data.txnId;
   return txnResponse.data;
 };
 
 const createHeathIDPreVerifiedNumber = async (userDetails) => {
-  const txnResponse = await userApis.createHealthIdWithPreVerified(
-    userData,
-    userDetails,
-    transactionId,
-    tokenGlobal
-  );
+  const txnResponse = await axios.post(urlEndpoint.createHealthIdUrl, {
+    ...userData,
+    ...userDetails,
+    txnId: transactionId,
+},{
+  headers:{
+    Authorization: `Bearer ${tokenGlobal}`,
+  }
+});
   return txnResponse.data;
 };
 

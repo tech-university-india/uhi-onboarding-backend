@@ -1,33 +1,86 @@
 const userService = require("../../services/onboarding/users/userService");
+const HTTPError = require("../../../src/util/error");
 
 const handleNewUserOnboardingRequest = async (request, response) => {
-  let { aadhaar } = request.body;
-  const {status,message}=await userService.handleNewUserOnboardingRequest(aadhaar);
-  response.status(status).json(message);
+  try{
+    let { aadhaar } = request.body;
+    const details=await userService.handleNewUserOnboardingRequest(aadhaar);
+    console.log("hi")
+    console.log(details.res);
+    if(details instanceof HTTPError)
+      throw details;
+    response.status(200).json(details);
+  }
+  catch(e){
+    response.send(e.message);
+  }
 };
 
 const handleUserVerificationRequest = async (request, response) => {
-  let userOtp = request.body.otp;
-  const {status,message}=await userService.handleUserVerificationRequest(userOtp);
+  try{
+    let userOtp = request.body.otp;
+    const details=await userService.handleUserVerificationRequest(userOtp);
+    console.log(details)
+    if(details instanceof HTTPError){
+      console.log('error')
+      throw new HTTPError("OTP could not be verified",400);
+    }
+    response.status(200).json(message);
+  }
+  catch(e){ 
+    response.send(e.message);
+  }
 };
 
 const resendOTP = async (request, response) => {
-  const {status,message}=await userService.handleResendOtp();
+  try{
+    const details=await userService.handleResendOtp();
+    if(details instanceof HTTPError)
+    throw details;
+    response.status(200).json(details);
+  }
+  catch(e){
+    response.send(e.message);
+  }
 }
 
 const handleCheckAndGenerateMobileOTP = async (request, response) => {
-  const userMobileNum = request.body.mobile;
-  const {status,message}=await userService.handleCheckAndGenerateMobileOTP(userMobileNum);
+  try{
+    const userMobileNum = request.body.mobile;
+    const details=await userService.handleCheckAndGenerateMobileOTP(userMobileNum);
+    if(details instanceof HTTPError)
+    throw details;
+    response.status(200).json(details);
+  }
+  catch(e){
+    response.send(e.message);
+  }
 };
 
 const verifyMobileOTP = async (request, response) => {
-  const userOtp = request.body.otp;
-  const {status,message}=await userService.verifyMobileOtp(userOtp);
+  try{
+    const userOtp = request.body.otp;
+    const details=await userService.verifyMobileOtp(userOtp);
+    if(details instanceof HTTPError)
+    throw details;
+    response.status(200).json(details);
+  }
+  catch(e){
+    response.send(e.message);
+  }
 };
 
 const createHeathIDPreVerifiedNumber = async (request, response) => {
-  const userDetails = request.body;
-  const {status,message}=await userService.createHeathIDPreVerifiedNumber(userDetails);
+  try{
+    const userDetails = request.body;
+    const details=await userService.createHeathIDPreVerifiedNumber(userDetails);
+    if(details instanceof HTTPError)
+    throw details;
+    response.status(200).json(details);
+  }
+  catch(e){
+    response.send(e.message);
+  }
 };
 
 module.exports = {};

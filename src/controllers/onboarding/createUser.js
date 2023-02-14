@@ -5,11 +5,9 @@ const handleNewUserOnboardingRequest = async (request, response) => {
   try{
     let { aadhaar } = request.body;
     const details=await userService.handleNewUserOnboardingRequest(aadhaar);
-    console.log("hi")
-    console.log(details.res);
     if(details instanceof HTTPError)
       throw details;
-    response.status(200).json(details);
+    response.status(200).json('OTP sent successfully');
   }
   catch(e){
     response.send(e.message);
@@ -20,12 +18,10 @@ const handleUserVerificationRequest = async (request, response) => {
   try{
     let userOtp = request.body.otp;
     const details=await userService.handleUserVerificationRequest(userOtp);
-    console.log(details)
     if(details instanceof HTTPError){
-      console.log('error')
       throw new HTTPError("OTP could not be verified",400);
     }
-    response.status(200).json(message);
+    response.status(200).json('OTP verified successfully');
   }
   catch(e){ 
     response.send(e.message);
@@ -37,7 +33,7 @@ const resendOTP = async (request, response) => {
     const details=await userService.handleResendOtp();
     if(details instanceof HTTPError)
     throw details;
-    response.status(200).json(details);
+    response.status(200).json('OTP sent successfully');
   }
   catch(e){
     response.send(e.message);
@@ -47,10 +43,13 @@ const resendOTP = async (request, response) => {
 const handleCheckAndGenerateMobileOTP = async (request, response) => {
   try{
     const userMobileNum = request.body.mobile;
-    const details=await userService.handleCheckAndGenerateMobileOTP(userMobileNum);
-    if(details instanceof HTTPError)
-    throw details;
-    response.status(200).json(details);
+    const isLinked=await userService.handleCheckAndGenerateMobileOTP(userMobileNum);
+    if(isLinked instanceof HTTPError)
+      throw details;
+    if(isLinked===true)
+      response.status(200).json('Mobile number already linked with aadhaar');
+    else
+      response.status(200).json('OTP sent successfully to this mobile number');
   }
   catch(e){
     response.send(e.message);
@@ -63,7 +62,7 @@ const verifyMobileOTP = async (request, response) => {
     const details=await userService.verifyMobileOtp(userOtp);
     if(details instanceof HTTPError)
     throw details;
-    response.status(200).json(details);
+    response.status(200).json('OTP verified successfully');
   }
   catch(e){
     response.send(e.message);
@@ -75,8 +74,8 @@ const createHeathIDPreVerifiedNumber = async (request, response) => {
     const userDetails = request.body;
     const details=await userService.createHeathIDPreVerifiedNumber(userDetails);
     if(details instanceof HTTPError)
-    throw details;
-    response.status(200).json(details);
+      throw details;
+    response.status(200).json(`ABHA Health ID created successfully. Your ABHA Health ID is ${details.healthIdNumber}`);
   }
   catch(e){
     response.send(e.message);

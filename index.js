@@ -1,5 +1,5 @@
+require('dotenv').config()
 const express = require('express')
-const sequelize = require('./src/services/database/dbConnection')
 const app = express()
 const onboardingRoutes = require('./src/routes/onboarding')
 

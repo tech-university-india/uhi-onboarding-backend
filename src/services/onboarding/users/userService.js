@@ -21,38 +21,30 @@ const handleNewUserOnboardingRequest = async (aadhar) => {
     publicKeyGlobal
   );
   if(encryptedAadhar===undefined)
-    return new HTTPError("Aadhaar could not be encrypted",500);
+    return new HTTPError("Something went wrong",500);
   const responseTxId = await userApis.generateOtp(encryptedAadhar, token);
-  if(responseTxId.data===undefined)
-    return new HTTPError("OTP not generated",400);
   transactionId = responseTxId.data.txnId;
   return responseTxId.data;
-  // console.log(responseTxId)
-  // console.log(responseTxId.data);
 };
 
 const handleUserVerificationRequest = async (otp) => {
   const encryptedOTP = await encrypt.getEncrypted(otp.toString(), publicKeyGlobal);
   if(encryptedOTP===undefined)
-    return new HTTPError("OTP could not be encrypted",500);
+    return new HTTPError("Something went wrong",500);
   const txnResponse = await userApis.verifyOtp(
     encryptedOTP,
     transactionId,
     tokenGlobal
   );
- 
-  if(txnResponse.data===undefined)
-    return new HTTPError("OTP could not be verified",400);
-  userData = txnResponse.data;
   transactionId = txnResponse.data.txnId;
+  userData = txnResponse.data;
+  return txnResponse.data;
 };
 
 const handleResendOtp = async () => {
   const txnResponse = await userApis.resendOtp(transactionId, tokenGlobal);
-  if(txnResponse===undefined)
-  return new HTTPError("OTP could not be resent",400);
-  console.log(txnResponse.data);
   transactionId = txnResponse.data.txnId;
+  return txnResponse.data;
 }
 
 const handleCheckAndGenerateMobileOTP = async (mobileNum) => {
@@ -61,11 +53,9 @@ const handleCheckAndGenerateMobileOTP = async (mobileNum) => {
     transactionId,
     tokenGlobal
   );
-  if(txnResponse===undefined)
-  return new HTTPError("Mobile number could not be checked",400);
-  console.log(txnResponse.data);
   transactionId = txnResponse.data.txnId;
   isLinked = txnResponse.data.mobileLinked;
+  return isLinked;
 };
 
 
@@ -77,10 +67,8 @@ const verifyMobileOtp = async (otp) => {
     transactionId,
     tokenGlobal
   );
-  if(txnResponse===undefined)
-  return new HTTPError("OTP could not be verified",400);
-  console.log(txnResponse.data);
   transactionId = txnResponse.data.txnId;
+  return txnResponse.data;
 };
 
 const createHeathIDPreVerifiedNumber = async (userDetails) => {
@@ -90,9 +78,7 @@ const createHeathIDPreVerifiedNumber = async (userDetails) => {
     transactionId,
     tokenGlobal
   );
-  if(txnResponse===undefined)
-  return new HTTPError("Health ID could not be created",400);
-  console.log(txnResponse.data);
+  return txnResponse.data;
 };
 
 module.exports = {

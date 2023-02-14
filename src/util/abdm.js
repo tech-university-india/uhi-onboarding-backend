@@ -7,10 +7,9 @@ const fs = require('fs')
 const FILE_NAME = 'fetchedToken.txt'
 const dotenv = require('dotenv')
 dotenv.config();
+
 const tokenFileExists = () =>
   fs.existsSync(FILE_NAME)
-
-
 
 const parseJWT = (jwt) => jose.decodeJwt(jwt)
 

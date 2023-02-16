@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up (queryInterface, Sequelize) {
     await queryInterface.createTable('Users', {
       id: {
         allowNull: false,
@@ -40,12 +40,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       emailId: {
-        type: Sequelize.INTEGER,
-    //    references: {model:'User_email', key:'id'},
+        type: Sequelize.INTEGER
       },
       phoneNumberId: {
-        type: Sequelize.INTEGER,
-      //  references: {model:'User_phone', key:'id'},
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -55,9 +53,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    });
+    })
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
+  async down (queryInterface, Sequelize) {
+    await queryInterface.dropTable('Users')
   }
-};
+}

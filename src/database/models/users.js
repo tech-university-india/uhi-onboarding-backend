@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate (models) {
       Users.hasMany(models.User_phr_address, { foreignKey: 'id' }),
-      Users.hasMany(models.User_location, { foreignKey: 'id' })
+      Users.belongsTo(models.User_emails, { foreignKey: 'emailId' }),
+      Users.belongsTo(models.User_phone_numbers, { foreignKey: 'phoneNumberId' })
     }
   }
   Users.init({

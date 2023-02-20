@@ -68,7 +68,7 @@ const createHeathIDPreVerifiedNumber = async (request, response) => {
     response
       .status(200)
       .json(
-        `ABHA Health ID created successfully. Your ABHA Health ID is ${details.healthId}`
+        `ABHA Health ID created successfully. Your ABHA Health ID is ${details.userData.healthId}`
       )
   } catch (e) {
     response.send(e.message)

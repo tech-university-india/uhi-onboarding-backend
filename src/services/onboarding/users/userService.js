@@ -4,7 +4,6 @@ const encrypt = require('../../../util/encryptionUtil')
 const HTTPError = require('../../../../src/util/error')
 const axios = require('axios')
 const urlEndpoint = require('../../../config/User/onboardingEndpoints')
-const db = require('../../../database/models')
 
 let tokenGlobal = ''
 let publicKeyGlobal = ''
@@ -99,39 +98,38 @@ const createHeathIDPreVerifiedNumber = async (userEmail) => {
       Authorization: `Bearer ${tokenGlobal}`
     }
   })
-  const mobile = txnResponse.data.mobile
-  const mobileId = await db.User_phone.create({
-    phoneNumber: mobile
-  },
-  { returning: true })
-  const email = txnResponse.data.email
-  const emailId = await db.User_email.create({
-    email
-  }, { returning: true })
-  const userObj = {
-    firstName: txnResponse.data.firstName,
-    lastName: txnResponse.data.lastName,
-    emailId: emailId.id,
-    phoneNumberId: mobileId.id,
-    name: txnResponse.data.name,
-    uniqueId: null,
-    healthId: txnResponse.data.healthIdNumber,
-    dateOfBirth: `${txnResponse.data.yearOfBirth}-${txnResponse.data.monthOfBirth}-${txnResponse.data.dayOfBirth}`,
-    middleName: txnResponse.data.middleName,
-    gender: txnResponse.data.gender,
-    profilePhoto: txnResponse.data.profilePhoto
-  }
-  const userDetails = await db.Users.create(userObj, { returning: true })
 
-  const userId = userDetails.id
-  await db.User_location.create({
-    userId,
-    stateCode: txnResponse.data.stateCode,
-    districtCode: txnResponse.data.districtCode,
-    subDistrictCode: txnResponse.data.subDistrictCode,
-    pinCode: txnResponse.data.pinCode,
-    address: `${userData.house} ${userData.locality} ${userData.street} ${userData.landmark === null ? '' : userData.landmark} ${userData.villageTownCity} ${userData.subDistrict === null ? '' : userData.subDistrict} ${userData.district} ${userData.state} ${userData.pinCode}}`
-  }, { returning: true })
+  const mobile = txnResponse.data.mobile
+  const email = txnResponse.data.email
+
+  const userDetails = {
+    userMobile: {
+      phoneNumber: mobile
+    },
+    userEmail: {
+      email
+    },
+    userAddress: {
+      stateCode: txnResponse.data.stateCode,
+      districtCode: txnResponse.data.districtCode,
+      subDistrictCode: txnResponse.data.subDistrictCode,
+      pinCode: txnResponse.data.pinCode,
+      address: `${userData.house} ${userData.locality} ${userData.street} ${userData.landmark === null ? '' : userData.landmark} ${userData.villageTownCity} ${userData.subDistrict === null ? '' : userData.subDistrict} ${userData.district} ${userData.state} ${userData.pinCode}}`
+    },
+    userData: {
+      firstName: txnResponse.data.firstName,
+      lastName: txnResponse.data.lastName,
+      name: txnResponse.data.name,
+      uniqueId: null,
+      healthId: txnResponse.data.healthIdNumber,
+      dateOfBirth: `${txnResponse.data.yearOfBirth}-${txnResponse.data.monthOfBirth}-${txnResponse.data.dayOfBirth}`,
+      middleName: txnResponse.data.middleName,
+      gender: txnResponse.data.gender,
+      profilePhoto: txnResponse.data.profilePhoto
+    }
+  }
+  // console.log(userDetails)
+  // make an axios call to create user in the database
   return userDetails
 }
 

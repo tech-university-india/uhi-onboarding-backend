@@ -98,10 +98,8 @@ const createHeathIDPreVerifiedNumber = async (userEmail) => {
       Authorization: `Bearer ${tokenGlobal}`
     }
   })
-
   const mobile = txnResponse.data.mobile
   const email = txnResponse.data.email
-
   const userDetails = {
     userMobile: {
       phoneNumber: mobile

@@ -1,5 +1,5 @@
 const Joi = require('joi')
-const { calculateJwkThumbprint } = require('jose')
+// const { calculateJwkThumbprint } = require('jose')
 
 const aadhaarNumberSchema = Joi.object({
   aadhaar: Joi.string().length(12).pattern(/^[0-9]+$/).required()

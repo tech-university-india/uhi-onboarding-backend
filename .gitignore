@@ -1,4 +1,6 @@
 node_modules
 node_modules/
 .env
+./src/util/fetchedToken.txt
+src/util/fetchedToken.txt
 database/config/config.json

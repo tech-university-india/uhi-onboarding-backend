@@ -1,7 +1,7 @@
 
-# Unified Healthcare Interface (UHI)
+# Unified Healthcare Interface (UHI) Onboarding Backend
 
-UHI is envisioned as an open protocol for various digital health services. UHI Network will be an open network of End User Applications (EUAs) and participating Health Service Provider (HSP) applications. UHI will enable a wide variety of digital health services between patients and health service providers (HSPs) including appointment booking, teleconsultation, service discovery and others.
+The backend service creates a layer of our APIs on top of the the government-provided APIs so that it becomes easy to use. The APIs deal with onboarding the users onto the UHI.
 
 ## Documentation
 

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1677961539818" clover="3.2.0">
+  <project timestamp="1677961539818" name="All files">
+    <metrics statements="28" coveredstatements="28" conditionals="11" coveredconditionals="11" methods="10" coveredmethods="10" elements="49" coveredelements="49" complexity="0" loc="28" ncloc="28" packages="1" files="1" classes="1"/>
+    <file name="abdm.js" path="/Users/shivam_agarwal/CodeAcademy/uhi-onboarding-backend/src/util/abdm.js">
+      <metrics statements="28" coveredstatements="28" conditionals="11" coveredconditionals="11" methods="10" coveredmethods="10"/>
+      <line num="5" count="1" type="stmt"/>
+      <line num="6" count="1" type="stmt"/>
+      <line num="7" count="1" type="stmt"/>
+      <line num="8" count="1" type="stmt"/>
+      <line num="9" count="5" type="stmt"/>
+      <line num="11" count="6" type="stmt"/>
+      <line num="13" count="1" type="stmt"/>
+      <line num="14" count="3" type="stmt"/>
+      <line num="15" count="3" type="stmt"/>
+      <line num="16" count="3" type="stmt"/>
+      <line num="19" count="3" type="stmt"/>
+      <line num="20" count="3" type="stmt"/>
+      <line num="21" count="3" type="cond" truecount="2" falsecount="0"/>
+      <line num="22" count="3" type="stmt"/>
+      <line num="26" count="1" type="stmt"/>
+      <line num="27" count="5" type="cond" truecount="2" falsecount="0"/>
+      <line num="28" count="4" type="stmt"/>
+      <line num="29" count="4" type="stmt"/>
+      <line num="30" count="4" type="cond" truecount="2" falsecount="0"/>
+      <line num="34" count="1" type="stmt"/>
+      <line num="37" count="1" type="stmt"/>
+      <line num="38" count="5" type="stmt"/>
+      <line num="39" count="4" type="cond" truecount="5" falsecount="0"/>
+      <line num="40" count="3" type="stmt"/>
+      <line num="41" count="3" type="stmt"/>
+      <line num="42" count="2" type="stmt"/>
+      <line num="44" count="1" type="stmt"/>
+      <line num="47" count="1" type="stmt"/>
+    </file>
+  </project>
+</coverage>

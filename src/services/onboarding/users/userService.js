@@ -7,8 +7,6 @@ const urlEndpoint = require('../../../config/User/onboardingEndpoints')
 
 let tokenGlobal = ''
 let publicKeyGlobal = ''
-let transactionId = ''
-let isLinked = false
 let userData = {}
 
 const handleNewUserOnboardingRequest = async (aadhar) => {
@@ -28,107 +26,94 @@ const handleNewUserOnboardingRequest = async (aadhar) => {
       Authorization: `Bearer ${tokenGlobal}`
     }
   })
-  transactionId = responseTxId.data.txnId
-  return responseTxId.data
+  return responseTxId.data.txnId
 }
 
-const handleUserVerificationRequest = async (otp) => {
+const handleUserVerificationRequest = async (otp, txnId) => {
   const encryptedOTP = await encrypt.getEncrypted(otp.toString(), publicKeyGlobal)
   if (encryptedOTP === undefined) { return new HTTPError('Something went wrong', 500) }
   const txnResponse = await axios.post(urlEndpoint.verifyOtpUrl, {
     otp: encryptedOTP,
-    txnId: transactionId
+    txnId
   }, {
     headers: {
       Authorization: `Bearer ${tokenGlobal}`
     }
   })
-  transactionId = txnResponse.data.txnId
   userData = txnResponse.data
-  return txnResponse.data
+  return txnResponse.data.txnId
 }
 
-const handleResendOtp = async () => {
+const handleResendOtp = async (txnId) => {
   const txnResponse = await axios.post(urlEndpoint.resendOtpUrl, {
-    txnId: transactionId
+    txnId
   }, {
     headers: {
       Authorization: `Bearer ${tokenGlobal}`
     }
   })
-  transactionId = txnResponse.data.txnId
-  return txnResponse.data
+  return ({
+    mobile: txnResponse.data.mobile,
+    txnId: txnResponse.data.txnId
+  })
 }
 
-const handleCheckAndGenerateMobileOTP = async (mobileNum) => {
+const handleCheckAndGenerateMobileOTP = async (mobileNum, txnId) => {
   const txnResponse = await axios.post(urlEndpoint.checkAndGenerateMobileOtpUrl, {
     mobile: mobileNum,
-    txnId: transactionId
+    txnId
   }, {
     headers: {
       Authorization: `Bearer ${tokenGlobal}`
     }
   })
-  transactionId = txnResponse.data.txnId
-  isLinked = txnResponse.data.mobileLinked
-  return isLinked
+  return {
+    isLinked: txnResponse.data.mobileLinked,
+    txnId: txnResponse.data.txnId
+  }
 }
 
-const verifyMobileOtp = async (otp) => {
+const verifyMobileOtp = async (otp, txnId) => {
   const userOtp = otp
   const txnResponse = await axios.post(urlEndpoint.verifyMobilOtpUrl, {
     otp: userOtp,
-    txnId: transactionId
+    txnId
   }, {
     headers: {
       Authorization: `Bearer ${tokenGlobal}`
     }
   })
-  transactionId = txnResponse.data.txnId
-  return txnResponse.data
+  return txnResponse.data.txnId
 }
 
-const createHeathIDPreVerifiedNumber = async (userEmail) => {
+const createHeathIDPreVerifiedNumber = async (email, password, txnId) => {
   const txnResponse = await axios.post(urlEndpoint.createHealthIdUrl, {
     ...userData,
-    ...userEmail,
-    txnId: transactionId
+    email,
+    password,
+    txnId
   }, {
     headers: {
       Authorization: `Bearer ${tokenGlobal}`
     }
   })
   const mobile = txnResponse.data.mobile
-  const email = txnResponse.data.email
   const userDetails = {
-    userMobile: {
-      phoneNumber: mobile
-    },
-    userEmail: {
-      email
-    },
-    userAddress: {
-      stateCode: txnResponse.data.stateCode,
-      districtCode: txnResponse.data.districtCode,
-      subDistrictCode: txnResponse.data.subDistrictCode,
-      pinCode: txnResponse.data.pinCode,
-      address: `${userData.house} ${userData.locality} ${userData.street} ${userData.landmark === null ? '' : userData.landmark} ${userData.villageTownCity} ${userData.subDistrict === null ? '' : userData.subDistrict} ${userData.district} ${userData.state} ${userData.pinCode}}`
-    },
-    userData: {
-      firstName: txnResponse.data.firstName,
-      lastName: txnResponse.data.lastName,
-      name: txnResponse.data.name,
-      uniqueId: null,
-      healthId: txnResponse.data.healthIdNumber,
-      dateOfBirth: `${txnResponse.data.yearOfBirth}-${txnResponse.data.monthOfBirth}-${txnResponse.data.dayOfBirth}`,
-      middleName: txnResponse.data.middleName,
-      gender: txnResponse.data.gender,
-      profilePhoto: txnResponse.data.profilePhoto
-    }
+    userName: txnResponse.data.name,
+    healthId: txnResponse.data.healthIdNumber,
+    firstName: txnResponse.data.firstName,
+    lastName: txnResponse.data.lastName,
+    middleName: txnResponse.data.middleName,
+    profilePhoto: txnResponse.data.profilePhoto,
+    emailId: email,
+    phoneNumber: mobile,
+    address: `${userData.house} ${userData.locality} ${userData.street} ${userData.landmark === null ? '' : userData.landmark} ${userData.villageTownCity} ${userData.subDistrict === null ? '' : userData.subDistrict} ${userData.district} ${userData.state} ${userData.pinCode}`,
+    dateOfBirth: `${txnResponse.data.yearOfBirth}-${txnResponse.data.monthOfBirth}-${txnResponse.data.dayOfBirth}`,
+    gender: txnResponse.data.gender
   }
-  // console.log(userDetails)
   // make an axios call to create user in the database
-  return userDetails
+
+  return userDetails.userData.healthId
 }
 
 module.exports = {

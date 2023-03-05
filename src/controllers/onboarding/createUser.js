@@ -6,7 +6,7 @@ const handleNewUserOnboardingRequest = async (request, response) => {
     const { aadhaar } = request.body
     const details = await userService.handleNewUserOnboardingRequest(aadhaar)
     if (details instanceof HTTPError) throw details
-    response.status(200).json('OTP sent successfully')
+    response.status(200).json({ message: 'OTP sent successfully', txnId: details })
   } catch (e) {
     response.send(e.message)
   }
@@ -15,11 +15,12 @@ const handleNewUserOnboardingRequest = async (request, response) => {
 const handleUserVerificationRequest = async (request, response) => {
   try {
     const userOtp = request.body.otp
-    const details = await userService.handleUserVerificationRequest(userOtp)
+    const txnId = request.body.txnId
+    const details = await userService.handleUserVerificationRequest(userOtp, txnId)
     if (details instanceof HTTPError) {
       throw new HTTPError('OTP could not be verified', 400)
     }
-    response.status(200).json('OTP verified successfully')
+    response.status(200).json({ message: 'OTP verified successfully', txnId: details })
   } catch (e) {
     response.send(e.message)
   }
@@ -27,9 +28,10 @@ const handleUserVerificationRequest = async (request, response) => {
 
 const resendOTP = async (request, response) => {
   try {
-    const details = await userService.handleResendOtp()
+    const { txnId } = request.body
+    const details = await userService.handleResendOtp(txnId)
     if (details instanceof HTTPError) throw details
-    response.status(200).json('OTP sent successfully')
+    response.status(200).json({ message: `OTP sent successfully on ${details.mobile}`, txnId: details.txnId })
   } catch (e) {
     response.send(e.message)
   }
@@ -38,10 +40,21 @@ const resendOTP = async (request, response) => {
 const handleCheckAndGenerateMobileOTP = async (request, response) => {
   try {
     const userMobileNum = request.body.mobile
-    const isLinked = await userService.handleCheckAndGenerateMobileOTP(
-      userMobileNum
+    const { txnId } = request.body
+    const linked = await userService.handleCheckAndGenerateMobileOTP(
+      userMobileNum, txnId
     )
-    if (isLinked === true) { response.status(200).json('Mobile number already linked with aadhaar') } else { response.status(200).json('OTP sent successfully to this mobile number') }
+    if (linked.isLinked === true) {
+      response.status(200).json({
+        message: 'Mobile number already linked with aadhaar',
+        txnId: linked.txnId
+      })
+    } else {
+      response.status(200).json({
+        message: 'OTP sent successfully to this mobile number',
+        txnId: linked.txnId
+      })
+    }
   } catch (e) {
     response.send(e.message)
   }
@@ -50,9 +63,10 @@ const handleCheckAndGenerateMobileOTP = async (request, response) => {
 const verifyMobileOTP = async (request, response) => {
   try {
     const userOtp = request.body.otp
-    const details = await userService.verifyMobileOtp(userOtp)
+    const { txnId } = request.body
+    const details = await userService.verifyMobileOtp(userOtp, txnId)
     if (details instanceof HTTPError) throw details
-    response.status(200).json('OTP verified successfully')
+    response.status(200).json({ message: 'OTP verified successfully', txnId: details })
   } catch (e) {
     response.send(e.message)
   }
@@ -60,15 +74,17 @@ const verifyMobileOTP = async (request, response) => {
 
 const createHeathIDPreVerifiedNumber = async (request, response) => {
   try {
-    const userDetails = request.body
+    const userEmail = request.body.email
+    const userPassword = request.body.password
+    const { txnId } = request.body
     const details = await userService.createHeathIDPreVerifiedNumber(
-      userDetails
+      userEmail, userPassword, txnId
     )
     if (details instanceof HTTPError) throw details
     response
       .status(200)
       .json(
-        `ABHA Health ID created successfully. Your ABHA Health ID is ${details.userData.healthId}`
+        `ABHA Health ID created successfully. Your ABHA Health ID is ${details}`
       )
   } catch (e) {
     response.send(e.message)

@@ -4,3 +4,5 @@ node_modules/
 ./src/util/fetchedToken.txt
 src/util/fetchedToken.txt
 database/config/config.json
+coverage
+coverage/

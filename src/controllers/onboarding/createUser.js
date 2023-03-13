@@ -76,9 +76,13 @@ const createHeathIDPreVerifiedNumber = async (request, response) => {
   try {
     const userEmail = request.body.email
     const userPassword = request.body.password
+    const healthId = request.body.healthId
+    const firstName = request.body.firstName
+    const lastName = request.body.lastName
+    const middleName = request.body.middleName
     const { txnId } = request.body
     const details = await userService.createHeathIDPreVerifiedNumber(
-      userEmail, userPassword, txnId
+      userEmail, userPassword, healthId, txnId, firstName, lastName, middleName
     )
     if (details instanceof HTTPError) throw details
     response

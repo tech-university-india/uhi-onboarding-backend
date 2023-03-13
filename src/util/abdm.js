@@ -14,7 +14,7 @@ const tokenFileExists = () =>
 const parseJWT = (jwt) => jose.decodeJwt(jwt)
 
 const fetchJWTFromServer = async () => {
-  tokenUrl = process.env.SANDBOXURL
+  const tokenUrl = process.env.SANDBOXURL
   const response = await fetch(tokenUrl)
   const token = await response.text()
   return token

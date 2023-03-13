@@ -4,14 +4,18 @@
 
 const jose = require('jose')
 const fs = require('fs')
-const FILE_NAME = './src/util/fetchedToken.txt'
+const FILE_NAME = 'fetchedToken.txt'
+const dotenv = require('dotenv')
+dotenv.config()
+
 const tokenFileExists = () =>
   fs.existsSync(FILE_NAME)
 
 const parseJWT = (jwt) => jose.decodeJwt(jwt)
 
 const fetchJWTFromServer = async () => {
-  const response = await fetch(process.env.SANDBOXURL)
+  tokenUrl = process.env.SANDBOXURL
+  const response = await fetch(tokenUrl)
   const token = await response.text()
   return token
 }

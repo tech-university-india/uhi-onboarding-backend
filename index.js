@@ -14,4 +14,6 @@ app.use('/', (request, response) => {
   response.send('Welcome to the backend API')
 })
 
-app.listen(9007)
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on port ${process.env.ONBOARDING_SERVICE_PORT}`)
+})

@@ -108,7 +108,7 @@ const verifyMobileOtp = async (otp, txnId) => {
   return txnResponse.data.txnId
 }
 
-const createHeathIDPreVerifiedNumber = async (email, password, healthId, txnId, firstName, lastName, middleName) => {
+const createHeathIDPreVerifiedNumber = async (email, password, healthId, txnId) => {
   const { token } = await abdm.getJWTToken()
   if (token === undefined) { return new HTTPError('Token not found', 404) }
 
@@ -146,7 +146,7 @@ const createHeathIDPreVerifiedNumber = async (email, password, healthId, txnId, 
   }
 
   // make an axios call to create user in the database
-  await axios.post('http://localhost:9006/user', {
+  await axios.post(urlEndpoint.userServiceUrl, {
     ...userDetails
   })
 

@@ -1,4 +1,3 @@
-.env
 ./fetchedToken.txt
 fetchedToken.txt
 node_modules

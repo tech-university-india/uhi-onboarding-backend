@@ -7,3 +7,4 @@ node_modules/
 database/config/config.json
 .DS_Store
 coverage
+dump.rdb

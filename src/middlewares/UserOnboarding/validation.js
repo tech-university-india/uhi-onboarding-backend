@@ -27,6 +27,7 @@ const mobileNumberSchema = Joi.object({
 const userEmailPasswordSchema = Joi.object({
   email: Joi.string().email().required(),
   // must have lower-case, upper-case, number and special character and minimum 8 characters
+  healthId: Joi.string().required(),
   password: Joi.string().pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/).required(),
   txnId: Joi.string().length(36).required()
 })
